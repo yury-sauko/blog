@@ -1,0 +1,16 @@
+.article-short-text {
+  display: inline-block;
+  width: 682px;
+  height: 45px;
+  font-size: 12px;
+  line-height: 1.83;
+
+  &--short-card {
+    margin-top: 5px;
+    color: rgba(0, 0, 0, 0.75);
+  }
+  &--full-card {
+    margin-top: 15px;
+    color: rgba(0, 0, 0, 0.5);
+  }
+}

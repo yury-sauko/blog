@@ -35,7 +35,6 @@
     "react/destructuring-assignment": 0,
     "jsx-a11y/no-autofocus": 1,
     "react/forbid-prop-types": 1,
-    "no-nested-ternary": "off",
     "no-underscore-dangle": "off"
   },
   "overrides": [

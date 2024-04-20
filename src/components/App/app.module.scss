@@ -1,0 +1,28 @@
+@import-normalize;
+
+@font-face {
+  font-family: 'Inter';
+  src:
+    local('Inter Regular'),
+    local('Inter-Regular'),
+    url('../../assets/fonts/Inter-Regular.woff2') format('woff2'),
+    url('../../assets/fonts/Inter-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*:before,
+*:after {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  background-color: #d9d9d9;
+}

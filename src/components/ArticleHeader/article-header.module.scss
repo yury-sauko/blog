@@ -1,0 +1,88 @@
+.article-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  &__header-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  &__header {
+    font-size: 20px;
+    line-height: 1.4;
+    color: #1890ff;
+  }
+  &__like-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  &__like-icon {
+    font-size: 16px;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.75);
+  }
+  &__like-count {
+    font-size: 12px;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.75);
+  }
+  &__tag-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    gap: 8px;
+  }
+  &__tag {
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.75);
+    border-radius: 2px;
+    padding: 0 4px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.75);
+    &:not(:first-child) {
+      border-color: rgba(0, 0, 0, 0.5);
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  &__right-col {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+  }
+  &__create-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  &__user-name {
+    font-size: 18px;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.85);
+  }
+  &__create-date {
+    font-size: 12px;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.5);
+  }
+  &__user-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+  }
+  &__user-avatar-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
