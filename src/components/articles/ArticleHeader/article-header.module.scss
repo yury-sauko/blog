@@ -12,11 +12,29 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    height: 28px;
   }
   &__header {
+    display: inline-block;
+    max-width: 55ch;
+    overflow: hidden;
     font-size: 20px;
     line-height: 1.4;
     color: #1890ff;
+    text-decoration: none;
+    &:visited {
+      color: #1673c9;
+    }
+    &:focus {
+      outline: 1px solid #1890ff;
+      outline-offset: 2px;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+    &:active {
+      color: #52c41a;
+    }
   }
   &__like-wrapper {
     display: flex;
@@ -34,6 +52,11 @@
     color: rgba(0, 0, 0, 0.75);
   }
   &__tag-list {
+    max-height: 37px;
+    max-width: 60ch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
     margin: 0;
     padding: 0;
     list-style-type: none;
@@ -42,6 +65,7 @@
   }
   &__tag {
     display: inline-block;
+    height: 20px;
     border: 1px solid rgba(0, 0, 0, 0.75);
     border-radius: 2px;
     padding: 0 4px;
@@ -63,8 +87,12 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    text-align: right;
   }
   &__user-name {
+    display: inline-block;
+    max-width: 20ch;
+    overflow: hidden;
     font-size: 18px;
     line-height: 1;
     color: rgba(0, 0, 0, 0.85);
@@ -77,12 +105,14 @@
   &__user-avatar {
     width: 46px;
     height: 46px;
-    border-radius: 50%;
+    font-size: 11px;
+    text-align: center;
   }
   &__user-avatar-img {
     height: 100%;
     width: 100%;
     object-fit: cover;
     object-position: center;
+    border-radius: 50%;
   }
 }

@@ -1,16 +1,23 @@
 .article-short-text {
   display: inline-block;
   width: 682px;
-  height: 45px;
   font-size: 12px;
   line-height: 1.83;
+  overflow-wrap: anywhere;
+  overflow: hidden;
 
   &--short-card {
+    height: 45px;
     margin-top: 5px;
     color: rgba(0, 0, 0, 0.75);
   }
   &--full-card {
     margin-top: 15px;
     color: rgba(0, 0, 0, 0.5);
+    // Обрезка многострочного текста
+    // https://webref.ru/recipe/2687
+    -webkit-line-clamp: 5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
 }

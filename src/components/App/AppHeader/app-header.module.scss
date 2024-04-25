@@ -1,0 +1,30 @@
+.app-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 80px;
+  background-color: #fff;
+  &__link-main {
+    display: inline-block;
+    margin: 0 auto 0 22px;
+    color: #1890ff;
+    text-decoration: none;
+    &:visited {
+      color: #1673c9;
+    }
+    &:focus {
+      outline: 1px solid #1890ff;
+      outline-offset: 5px;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+    &:active {
+      color: #52c41a;
+    }
+  }
+  &__h1 {
+    margin: 0;
+    font-size: 18px;
+  }
+}
