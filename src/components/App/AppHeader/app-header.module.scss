@@ -27,4 +27,37 @@
     margin: 0;
     font-size: 18px;
   }
+  &__link-sign-in,
+  &__link-sign-up {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 109px;
+    height: 51px;
+    margin-right: 22px;
+    border: 1px solid #52c41a;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #52c41a;
+    text-decoration: none;
+    background-color: inherit;
+    cursor: pointer;
+    &:focus,
+    &:active {
+      color: #1890ff;
+      border-color: #1890ff;
+      outline: none;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  &__link-sign-in {
+    color: rgba(0, 0, 0, 0.85);
+    border: none;
+    &:focus,
+    &:active {
+      border: 1px solid #1890ff;
+    }
+  }
 }

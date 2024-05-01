@@ -1,27 +1,39 @@
 .button {
-  width: 109px;
-  height: 51px;
-  margin-right: 22px;
-  border: 1px solid rgba(0, 0, 0, 0.85);
-  border-radius: 5px;
-  font-size: 18px;
-  color: rgba(0, 0, 0, 0.85);
-  background-color: inherit;
-  cursor: pointer;
+  height: 40px;
+  background-color: #1890ff;
+  border: 1px solid #1890ff;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+
   &:focus,
   &:active {
-    color: #1890ff;
-    border-color: #1890ff;
+    font-weight: bolder;
+    border-color: #bddbf8;
+    background: linear-gradient(
+      90deg,
+      rgba(189, 219, 248, 1) 10%,
+      rgba(24, 144, 255, 1) 35%,
+      rgba(24, 144, 255, 1) 65%,
+      rgba(189, 219, 248, 1) 90%
+    );
     outline: none;
+  }
+  &:active {
+    background: linear-gradient(
+      90deg,
+      rgba(189, 219, 248, 1) 15%,
+      rgba(110, 177, 239, 1) 40%,
+      rgba(110, 177, 239, 1) 60%,
+      rgba(189, 219, 248, 1) 85%
+    );
   }
   &:hover {
     text-decoration: underline;
   }
-  &--sign-in {
-    border: none;
-  }
-  &--sign-up {
-    color: #52c41a;
-    border-color: #52c41a;
+
+  &--full-width {
+    width: 100%;
+    margin-bottom: 8px;
   }
 }

@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../components/App/App';
-import ArticlesList from '../components/articles/ArticlesList/ArticlesList';
+import ArticlesList from '../components/articlesPages/ArticlesList/ArticlesList';
 import BlogPagination from '../components/BlogPagination/BlogPagination';
-import ArticleFull from '../components/articles/ArticleFull/ArticleFull';
+import ArticleFull from '../components/articlesPages/ArticleFull/ArticleFull';
+import SignIn from '../components/SignIn/SignIn';
+import SignUp from '../components/SignUp/SignUp';
 import PageNotFound from '../components/PageNotFound/PageNotFound';
 
 const router = createBrowserRouter([
@@ -23,6 +25,14 @@ const router = createBrowserRouter([
         path: 'articles/:slug',
         element: <ArticleFull />,
         loader: ({ params }) => params.slug,
+      },
+      {
+        path: 'sign-in',
+        element: <SignIn />,
+      },
+      {
+        path: 'sign-up',
+        element: <SignUp />,
       },
       {
         path: '*',
