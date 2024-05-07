@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import fetchArticles from '../../middlewares/fetchArticles';
+import mwFetchArticles from '../../middlewares/mwFetchArticles';
 import AppHeader from './AppHeader/AppHeader';
 import AppMainContent from './AppMainContent/AppMainContent';
 import classes from './app.module.scss';
@@ -11,7 +11,7 @@ export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const timer = setTimeout(() => dispatch(fetchArticles(offset)), 1500);
+    const timer = setTimeout(() => dispatch(mwFetchArticles(offset)), 1500);
     return () => {
       clearTimeout(timer);
     };

@@ -6,6 +6,8 @@ import ArticleFull from '../components/articlesPages/ArticleFull/ArticleFull';
 import SignIn from '../components/SignIn/SignIn';
 import SignUp from '../components/SignUp/SignUp';
 import SuccessCreateUser from '../components/servicePages/SuccessCreateUser/SuccessCreateUser';
+import EditProfile from '../components/EditProfile/EditProfile';
+import SuccessEditUserProfile from '../components/servicePages/SuccessEditUserProfile/SuccessEditUserProfile';
 import PageNotFound from '../components/servicePages/PageNotFound/PageNotFound';
 
 const router = createBrowserRouter([
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
       {
         path: 'success-create-user',
         element: <SuccessCreateUser />,
+      },
+      {
+        path: 'profile',
+        element: <EditProfile />,
+      },
+      {
+        path: 'success-edit-user-profile',
+        element: <SuccessEditUserProfile />,
       },
       {
         path: '*',

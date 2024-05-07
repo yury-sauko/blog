@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export default createAsyncThunk('userData/createNewUser', async (userData, { rejectWithValue }) => {
+export default createAsyncThunk('userData/mwLoginUser', async (userData, { rejectWithValue }) => {
   try {
     const baseUrl = 'https://blog.kata.academy/api';
 
-    const response = await fetch(`${baseUrl}/users`, {
+    const response = await fetch(`${baseUrl}/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
@@ -13,12 +13,12 @@ export default createAsyncThunk('userData/createNewUser', async (userData, { rej
     });
 
     if (!response.ok) {
-      throw new Error(`Could not fetch ${baseUrl}/users, received status ${response.status}`);
+      throw new Error(`Could not fetch ${baseUrl}/users/login, received status ${response.status}`);
     }
 
     const data = await response.json();
 
-    return data.user.username;
+    return data.user;
   } catch (error) {
     return rejectWithValue(error.message);
   }

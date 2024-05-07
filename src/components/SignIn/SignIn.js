@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { confirmLoginStatus } from '../../store/userData.slice';
-import loginUser from '../../middlewares/loginUser';
+import { confirmLoggedIn } from '../../store/userData.slice';
+import mwLoginUser from '../../middlewares/mwLoginUser';
 import Button from '../Button/Button';
 import classes from './sign-in.module.scss';
 
@@ -11,18 +11,21 @@ export default function SignIn() {
     emailInput: '',
     passwInput: '',
   });
+  const { loginStatus } = useSelector((state) => state.userData);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setInputValues((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
   };
 
-  const dispatch = useDispatch();
   const onSubmit = (e) => {
     e.preventDefault();
     const { emailInput, passwInput } = inputValues;
 
     dispatch(
-      loginUser({
+      mwLoginUser({
         user: {
           email: emailInput,
           password: passwInput,
@@ -33,12 +36,10 @@ export default function SignIn() {
     setInputValues({ emailInput: '', passwInput: '' });
   };
 
-  const { loginStatus } = useSelector((state) => state.userData);
-  const navigate = useNavigate();
   useEffect(() => {
     if (loginStatus === 'resolved') {
       navigate('..');
-      dispatch(confirmLoginStatus());
+      dispatch(confirmLoggedIn());
     }
   }, [loginStatus]);
 

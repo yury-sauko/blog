@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { updateCreateStatus } from '../../store/userData.slice';
-import createNewUser from '../../middlewares/createNewUser';
+import { confirmCreating } from '../../store/userData.slice';
+import mwCreateNewUser from '../../middlewares/mwCreateNewUser';
 import Button from '../Button/Button';
 import classes from './sign-up.module.scss';
 
@@ -14,18 +14,21 @@ export default function SignUp() {
     repeatPasswInput: '',
   });
   const [checkBoxStatus, setCheckBoxStatus] = useState(false);
+  const { createStatus } = useSelector((state) => state.userData);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setInputValues((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
   };
 
-  const dispatch = useDispatch();
   const onSubmit = (e) => {
     e.preventDefault();
     const { userNameInput, emailInput, passwInput } = inputValues;
 
     dispatch(
-      createNewUser({
+      mwCreateNewUser({
         user: {
           username: userNameInput,
           email: emailInput,
@@ -43,12 +46,10 @@ export default function SignUp() {
     setCheckBoxStatus(false);
   };
 
-  const { createStatus } = useSelector((state) => state.userData);
-  const navigate = useNavigate();
   useEffect(() => {
     if (createStatus === 'resolved') {
       navigate('../success-create-user');
-      dispatch(updateCreateStatus());
+      dispatch(confirmCreating());
     }
   }, [createStatus]);
 

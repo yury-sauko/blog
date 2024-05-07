@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import createNewUser from '../middlewares/createNewUser';
-import loginUser from '../middlewares/loginUser';
+import mwCreateNewUser from '../middlewares/mwCreateNewUser';
+import mwLoginUser from '../middlewares/mwLoginUser';
+import mwEditUserProfile from '../middlewares/mwEditUserProfile';
 
 const initialState = {
   createStatus: null,
   loginStatus: null,
+  editUserProfileStatus: null,
   lastCreatedUsername: null,
-  currUserData: null,
+  currUserData: { username: null, image: null },
 };
 
 const userDataSlice = createSlice({
@@ -14,40 +16,58 @@ const userDataSlice = createSlice({
   initialState,
 
   reducers: {
-    updateCreateStatus: (state) => {
+    confirmCreating: (state) => {
       state.createStatus = 'created';
     },
-    confirmLoginStatus: (state) => {
+    confirmLoggedIn: (state) => {
       state.loginStatus = 'loggedIn';
+    },
+    confirmLoggedOut: (state) => {
+      state.loginStatus = 'loggedOut';
+    },
+    confirmEditing: (state) => {
+      state.editUserProfileStatus = 'edited';
     },
   },
 
   extraReducers: (builder) => {
     builder
-      .addCase(createNewUser.pending, (state) => {
+      .addCase(mwCreateNewUser.pending, (state) => {
         state.createStatus = 'pending';
       })
-      .addCase(createNewUser.fulfilled, (state, action) => {
+      .addCase(mwCreateNewUser.fulfilled, (state, action) => {
         state.createStatus = 'resolved';
         state.lastCreatedUsername = action.payload;
       })
-      .addCase(createNewUser.rejected, (state) => {
+      .addCase(mwCreateNewUser.rejected, (state) => {
         state.createStatus = 'rejected';
       })
 
-      .addCase(loginUser.pending, (state) => {
+      .addCase(mwLoginUser.pending, (state) => {
         state.loginStatus = 'pending';
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(mwLoginUser.fulfilled, (state, action) => {
         state.loginStatus = 'resolved';
         state.currUserData = action.payload;
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(mwLoginUser.rejected, (state) => {
         state.loginStatus = 'rejected';
+      })
+
+      .addCase(mwEditUserProfile.pending, (state) => {
+        state.editUserProfileStatus = 'pending';
+      })
+      .addCase(mwEditUserProfile.fulfilled, (state, action) => {
+        state.editUserProfileStatus = 'resolved';
+        state.currUserData = action.payload;
+      })
+      .addCase(mwEditUserProfile.rejected, (state) => {
+        state.editUserProfileStatus = 'rejected';
       });
   },
 });
 
-export const { updateCreateStatus, confirmLoginStatus } = userDataSlice.actions;
+export const { confirmCreating, confirmLoggedIn, confirmLoggedOut, confirmEditing } =
+  userDataSlice.actions;
 
 export default userDataSlice.reducer;

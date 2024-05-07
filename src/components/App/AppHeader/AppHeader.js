@@ -1,10 +1,20 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import userAvatar from '../../../assets/img/userAvatar.svg';
+import { confirmLoggedOut } from '../../../store/userData.slice';
+import defUserAvatar from '../../../assets/img/userAvatar.svg';
 import classes from './app-header.module.scss';
 
 export default function AppHeader() {
   const { loginStatus } = useSelector((state) => state.userData);
+  const { username, image } = useSelector((state) => state.userData.currUserData);
+
+  const userAvatar = image || defUserAvatar;
+
+  const dispatch = useDispatch();
+
+  const onBtnClick = () => {
+    dispatch(confirmLoggedOut());
+  };
 
   const authorizedBlock = (
     <>
@@ -12,12 +22,12 @@ export default function AppHeader() {
         Create article
       </Link>
       <Link to="profile" className={classes['app-header__link-profile']}>
-        <span className={classes['app-header__username']}>John Doe</span>
+        <span className={classes['app-header__username']}>{username}</span>
         <div className={classes['app-header__avatar-wrapper']}>
           <img src={userAvatar} alt="User avatar" className={classes['app-header__avatar-img']} />
         </div>
       </Link>
-      <button type="button" className={classes['app-header__btn-log-out']}>
+      <button type="button" className={classes['app-header__btn-log-out']} onClick={onBtnClick}>
         Log Out
       </button>
     </>

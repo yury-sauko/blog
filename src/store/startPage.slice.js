@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-import fetchArticles from '../middlewares/fetchArticles';
+import mwFetchArticles from '../middlewares/mwFetchArticles';
 
 const initialState = {
   statusArticlesReceipt: null,
@@ -24,15 +23,15 @@ const startPageSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchArticles.pending, (state) => {
+      .addCase(mwFetchArticles.pending, (state) => {
         state.statusArticlesReceipt = 'loading';
       })
-      .addCase(fetchArticles.fulfilled, (state, action) => {
+      .addCase(mwFetchArticles.fulfilled, (state, action) => {
         state.statusArticlesReceipt = 'resolved';
         state.articles = action.payload.articles;
         state.articlesCount = action.payload.articlesCount;
       })
-      .addCase(fetchArticles.rejected, (state) => {
+      .addCase(mwFetchArticles.rejected, (state) => {
         state.statusArticlesReceipt = 'rejected';
       });
   },
