@@ -1,10 +1,59 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { updateCreateStatus } from '../../store/userData.slice';
+import createNewUser from '../../middlewares/createNewUser';
 import Button from '../Button/Button';
 import classes from './sign-up.module.scss';
 
 export default function SignUp() {
+  const [inputValues, setInputValues] = useState({
+    userNameInput: '',
+    emailInput: '',
+    passwInput: '',
+    repeatPasswInput: '',
+  });
+  const [checkBoxStatus, setCheckBoxStatus] = useState(false);
+
+  const handleInputChange = (e) => {
+    setInputValues((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+  };
+
+  const dispatch = useDispatch();
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const { userNameInput, emailInput, passwInput } = inputValues;
+
+    dispatch(
+      createNewUser({
+        user: {
+          username: userNameInput,
+          email: emailInput,
+          password: passwInput,
+        },
+      }),
+    );
+
+    setInputValues({
+      userNameInput: '',
+      emailInput: '',
+      passwInput: '',
+      repeatPasswInput: '',
+    });
+    setCheckBoxStatus(false);
+  };
+
+  const { createStatus } = useSelector((state) => state.userData);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (createStatus === 'resolved') {
+      navigate('../success-create-user');
+      dispatch(updateCreateStatus());
+    }
+  }, [createStatus]);
+
   return (
-    <form name="sign-up" className={classes['sign-up-form']} noValidate>
+    <form name="sign-up" className={classes['sign-up-form']} noValidate onSubmit={onSubmit}>
       <h2 className={classes['sign-up-form__header']}>Create new account</h2>
 
       <label htmlFor="userName" className={classes['sign-up-form__label']}>
@@ -15,6 +64,9 @@ export default function SignUp() {
           placeholder="Username"
           id="userName"
           className={classes['sign-up-form__input']}
+          name="userNameInput"
+          value={inputValues.userNameInput}
+          onChange={handleInputChange}
         />
       </label>
 
@@ -26,6 +78,9 @@ export default function SignUp() {
           placeholder="Email address"
           id="email_addr"
           className={classes['sign-up-form__input']}
+          name="emailInput"
+          value={inputValues.emailInput}
+          onChange={handleInputChange}
         />
       </label>
 
@@ -37,6 +92,9 @@ export default function SignUp() {
           placeholder="Password"
           id="passw"
           className={classes['sign-up-form__input']}
+          name="passwInput"
+          value={inputValues.passwInput}
+          onChange={handleInputChange}
         />
       </label>
 
@@ -48,11 +106,20 @@ export default function SignUp() {
           placeholder="Password"
           id="passwRep"
           className={classes['sign-up-form__input']}
+          name="repeatPasswInput"
+          value={inputValues.repeatPasswInput}
+          onChange={handleInputChange}
         />
       </label>
 
       <label htmlFor="checkBox" className={classes['sign-up-form__label']}>
-        <input type="checkbox" id="checkBox" className={classes['sign-up-form__checkbox']} />
+        <input
+          type="checkbox"
+          id="checkBox"
+          className={classes['sign-up-form__checkbox']}
+          checked={checkBoxStatus}
+          onChange={() => setCheckBoxStatus(!checkBoxStatus)}
+        />
         <span className={classes['sign-up-form__checkbox-text']}>
           I agree to the processing of my personal information
         </span>
@@ -68,9 +135,5 @@ export default function SignUp() {
         .
       </span>
     </form>
-
-    //   <Checkbox name="checkbox" className="sign-up-form__checkbox">
-    //     I agree to the processing of my personal information
-    //   </Checkbox>
   );
 }

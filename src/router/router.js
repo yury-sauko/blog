@@ -5,7 +5,8 @@ import BlogPagination from '../components/BlogPagination/BlogPagination';
 import ArticleFull from '../components/articlesPages/ArticleFull/ArticleFull';
 import SignIn from '../components/SignIn/SignIn';
 import SignUp from '../components/SignUp/SignUp';
-import PageNotFound from '../components/PageNotFound/PageNotFound';
+import SuccessCreateUser from '../components/servicePages/SuccessCreateUser/SuccessCreateUser';
+import PageNotFound from '../components/servicePages/PageNotFound/PageNotFound';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: 'sign-up',
         element: <SignUp />,
+      },
+      {
+        path: 'success-create-user',
+        element: <SuccessCreateUser />,
       },
       {
         path: '*',

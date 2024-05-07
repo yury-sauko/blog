@@ -5,7 +5,7 @@ import classes from './button.module.scss';
 const cnb = classNamesBind.bind(classes);
 export default function Button({ children, classMod }) {
   return (
-    <button type="button" className={cnb('button', classMod)}>
+    <button type="submit" className={cnb('button', classMod)}>
       {children}
     </button>
   );
