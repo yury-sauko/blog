@@ -8,7 +8,7 @@ const initialState = {
   loginStatus: null,
   editUserProfileStatus: null,
   lastCreatedUsername: null,
-  currUserData: { username: null, image: null },
+  currUserData: { username: '', image: '' },
 };
 
 const userDataSlice = createSlice({
@@ -24,6 +24,7 @@ const userDataSlice = createSlice({
     },
     confirmLoggedOut: (state) => {
       state.loginStatus = 'loggedOut';
+      state.currUserData = { username: '', image: '' };
     },
     confirmEditing: (state) => {
       state.editUserProfileStatus = 'edited';

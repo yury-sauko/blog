@@ -24,7 +24,11 @@ const startPageSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(mwFetchArticles.pending, (state) => {
-        state.statusArticlesReceipt = 'loading';
+        // убираем лишнюю перерисовку, с миганием лоадера, при перезагрузке страницы
+        // (так как начальная загрузка уже выполнена и стор синхронизирован с session storage)
+        if (state.statusArticlesReceipt !== 'resolved') {
+          state.statusArticlesReceipt = 'loading';
+        }
       })
       .addCase(mwFetchArticles.fulfilled, (state, action) => {
         state.statusArticlesReceipt = 'resolved';
