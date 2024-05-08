@@ -1,39 +1,53 @@
-import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import classNamesBind from 'classnames/bind';
 import { confirmLoggedIn } from '../../store/userData.slice';
 import mwLoginUser from '../../middlewares/mwLoginUser';
 import Button from '../Button/Button';
 import classes from './sign-in.module.scss';
 
-export default function SignIn() {
-  const [inputValues, setInputValues] = useState({
-    emailInput: '',
-    passwInput: '',
-  });
-  const { loginStatus } = useSelector((state) => state.userData);
+const cnb = classNamesBind.bind(classes);
 
+const schema = yup
+  .object({
+    emailInput: yup
+      .string()
+      .email('Enter a valid email address')
+      .min(5, 'Enter a valid email address')
+      .max(40, "Too much, isn't it? Maximum 40 characters")
+      .required(),
+    passwInput: yup
+      .string()
+      .min(6, 'Password needs to be at least 6 characters')
+      .max(40, 'Password needs to be maximum 40 characters')
+      .required(),
+  })
+  .required();
+
+export default function SignIn() {
+  const { loginStatus } = useSelector((state) => state.userData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    setInputValues((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const { emailInput, passwInput } = inputValues;
-
+  const onSubmit = (data) => {
     dispatch(
       mwLoginUser({
         user: {
-          email: emailInput,
-          password: passwInput,
+          email: data.emailInput,
+          password: data.passwInput,
         },
       }),
     );
-
-    setInputValues({ emailInput: '', passwInput: '' });
   };
 
   useEffect(() => {
@@ -44,36 +58,43 @@ export default function SignIn() {
   }, [loginStatus]);
 
   return (
-    <form name="sign-in" className={classes['sign-in-form']} noValidate onSubmit={onSubmit}>
+    <form
+      name="sign-in"
+      className={classes['sign-in-form']}
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+    >
       <h2 className={classes['sign-in-form__header']}>Sign In</h2>
 
       <label htmlFor="email_addr" className={classes['sign-in-form__label']}>
         <span className={classes['sign-in-form__label-text']}>Email address</span>
         <input
           type="email"
-          autoComplete="on"
           placeholder="Email address"
           id="email_addr"
-          className={classes['sign-in-form__input']}
-          name="emailInput"
-          value={inputValues.emailInput}
-          onChange={handleInputChange}
+          autoComplete="on"
+          className={cnb('sign-in-form__input', {
+            'sign-in-form__input--validation-error': errors.emailInput,
+          })}
+          {...register('emailInput')}
         />
       </label>
+      <p className={classes['sign-in-form__validation-error-text']}>{errors.emailInput?.message}</p>
 
       <label htmlFor="passw" className={classes['sign-in-form__label']}>
         <span className={classes['sign-in-form__label-text']}>Password</span>
         <input
           type="password"
-          autoComplete="off"
           placeholder="Password"
           id="passw"
-          className={classes['sign-in-form__input']}
-          name="passwInput"
-          value={inputValues.passwInput}
-          onChange={handleInputChange}
+          autoComplete="off"
+          className={cnb('sign-in-form__input', {
+            'sign-in-form__input--validation-error': errors.passwInput,
+          })}
+          {...register('passwInput')}
         />
       </label>
+      <p className={classes['sign-in-form__validation-error-text']}>{errors.passwInput?.message}</p>
 
       <Button classMod="button--full-width">Login</Button>
 

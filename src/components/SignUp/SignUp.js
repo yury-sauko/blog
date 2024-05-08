@@ -1,49 +1,69 @@
-import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import classNamesBind from 'classnames/bind';
 import { confirmCreating } from '../../store/userData.slice';
 import mwCreateNewUser from '../../middlewares/mwCreateNewUser';
 import Button from '../Button/Button';
 import classes from './sign-up.module.scss';
 
+const cnb = classNamesBind.bind(classes);
+
+const schema = yup
+  .object({
+    userNameInput: yup
+      .string()
+      .min(3, 'Username needs to be at least 3 characters')
+      .max(20, 'Password needs to be maximum 20 characters')
+      .required(),
+    emailInput: yup
+      .string()
+      .email('Enter a valid email address')
+      .min(5, 'Enter a valid email address')
+      .max(40, "Too much, isn't it? Maximum 40 characters")
+      .required(),
+    passwInput: yup
+      .string()
+      .min(6, 'Password needs to be at least 6 characters')
+      .max(40, 'Password needs to be maximum 40 characters')
+      .required(),
+    repeatPasswInput: yup
+      .string()
+      .min(6, 'Password needs to be at least 6 characters')
+      .oneOf([yup.ref('passwInput'), null], "Passwords don't match")
+      .required(),
+    checkBoxInput: yup
+      .boolean()
+      .oneOf([true], 'Please confirm the processing of your data')
+      .required(),
+  })
+  .required();
+
 export default function SignUp() {
-  const [inputValues, setInputValues] = useState({
-    userNameInput: '',
-    emailInput: '',
-    passwInput: '',
-    repeatPasswInput: '',
-  });
-  const [checkBoxStatus, setCheckBoxStatus] = useState(false);
   const { createStatus } = useSelector((state) => state.userData);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    setInputValues((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const { userNameInput, emailInput, passwInput } = inputValues;
-
+  const onSubmit = (data) => {
     dispatch(
       mwCreateNewUser({
         user: {
-          username: userNameInput,
-          email: emailInput,
-          password: passwInput,
+          username: data.userNameInput,
+          email: data.emailInput,
+          password: data.passwInput,
         },
       }),
     );
-
-    setInputValues({
-      userNameInput: '',
-      emailInput: '',
-      passwInput: '',
-      repeatPasswInput: '',
-    });
-    setCheckBoxStatus(false);
   };
 
   useEffect(() => {
@@ -54,7 +74,12 @@ export default function SignUp() {
   }, [createStatus]);
 
   return (
-    <form name="sign-up" className={classes['sign-up-form']} noValidate onSubmit={onSubmit}>
+    <form
+      name="sign-up"
+      className={classes['sign-up-form']}
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <h2 className={classes['sign-up-form__header']}>Create new account</h2>
 
       <label htmlFor="userName" className={classes['sign-up-form__label']}>
@@ -64,12 +89,15 @@ export default function SignUp() {
           autoComplete="on"
           placeholder="Username"
           id="userName"
-          className={classes['sign-up-form__input']}
-          name="userNameInput"
-          value={inputValues.userNameInput}
-          onChange={handleInputChange}
+          className={cnb('sign-up-form__input', {
+            'sign-up-form__input--validation-error': errors.userNameInput,
+          })}
+          {...register('userNameInput')}
         />
       </label>
+      <p className={classes['sign-up-form__validation-error-text']}>
+        {errors.userNameInput?.message}
+      </p>
 
       <label htmlFor="email_addr" className={classes['sign-up-form__label']}>
         <span className={classes['sign-up-form__label-text']}>Email address</span>
@@ -78,12 +106,13 @@ export default function SignUp() {
           autoComplete="on"
           placeholder="Email address"
           id="email_addr"
-          className={classes['sign-up-form__input']}
-          name="emailInput"
-          value={inputValues.emailInput}
-          onChange={handleInputChange}
+          className={cnb('sign-up-form__input', {
+            'sign-up-form__input--validation-error': errors.emailInput,
+          })}
+          {...register('emailInput')}
         />
       </label>
+      <p className={classes['sign-up-form__validation-error-text']}>{errors.emailInput?.message}</p>
 
       <label htmlFor="passw" className={classes['sign-up-form__label']}>
         <span className={classes['sign-up-form__label-text']}>Password</span>
@@ -92,12 +121,13 @@ export default function SignUp() {
           autoComplete="off"
           placeholder="Password"
           id="passw"
-          className={classes['sign-up-form__input']}
-          name="passwInput"
-          value={inputValues.passwInput}
-          onChange={handleInputChange}
+          className={cnb('sign-up-form__input', {
+            'sign-up-form__input--validation-error': errors.passwInput,
+          })}
+          {...register('passwInput')}
         />
       </label>
+      <p className={classes['sign-up-form__validation-error-text']}>{errors.passwInput?.message}</p>
 
       <label htmlFor="passwRep" className={classes['sign-up-form__label']}>
         <span className={classes['sign-up-form__label-text']}>Repeat Password</span>
@@ -106,25 +136,34 @@ export default function SignUp() {
           autoComplete="off"
           placeholder="Password"
           id="passwRep"
-          className={classes['sign-up-form__input']}
-          name="repeatPasswInput"
-          value={inputValues.repeatPasswInput}
-          onChange={handleInputChange}
+          className={cnb('sign-up-form__input', {
+            'sign-up-form__input--validation-error': errors.repeatPasswInput,
+          })}
+          {...register('repeatPasswInput')}
         />
       </label>
+      <p className={classes['sign-up-form__validation-error-text']}>
+        {errors.repeatPasswInput?.message}
+      </p>
 
       <label htmlFor="checkBox" className={classes['sign-up-form__label']}>
         <input
           type="checkbox"
           id="checkBox"
           className={classes['sign-up-form__checkbox']}
-          checked={checkBoxStatus}
-          onChange={() => setCheckBoxStatus(!checkBoxStatus)}
+          {...register('checkBoxInput')}
         />
-        <span className={classes['sign-up-form__checkbox-text']}>
+        <span
+          className={cnb('sign-up-form__checkbox-text', {
+            'sign-up-form__checkbox-text--validation-error': errors.checkBoxInput,
+          })}
+        >
           I agree to the processing of my personal information
         </span>
       </label>
+      <p className={classes['sign-up-form__validation-error-text']}>
+        {errors.checkBoxInput?.message}
+      </p>
 
       <Button classMod="button--full-width">Create</Button>
 

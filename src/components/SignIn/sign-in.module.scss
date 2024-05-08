@@ -22,7 +22,6 @@
   }
   &__label {
     display: block;
-    margin-bottom: 20px;
   }
   &__label-text {
     display: block;
@@ -53,6 +52,12 @@
         color: #999;
       }
     }
+    &--validation-error {
+      border-color: #f5222d;
+      &:focus {
+        border-color: #f5222d;
+      }
+    }
   }
   &__text-sign-up {
     display: block;
@@ -72,5 +77,13 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+  &__validation-error-text {
+    margin: 0;
+    padding-top: 3px;
+    min-height: 20px;
+    font-size: 13px;
+    line-height: 1.15;
+    color: #f5222d;
   }
 }
