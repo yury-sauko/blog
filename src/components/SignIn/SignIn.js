@@ -19,12 +19,14 @@ const schema = yup
       .email('Enter a valid email address')
       .min(5, 'Enter a valid email address')
       .max(40, "Too much, isn't it? Maximum 40 characters")
-      .required(),
+      .required('It is a required field. Please fill'),
     passwInput: yup
       .string()
+      .trim('No leading and trailing spaces')
+      .strict()
       .min(6, 'Password needs to be at least 6 characters')
       .max(40, 'Password needs to be maximum 40 characters')
-      .required(),
+      .required('It is a required field. Please fill'),
   })
   .required();
 

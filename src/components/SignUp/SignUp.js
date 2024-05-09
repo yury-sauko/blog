@@ -16,29 +16,35 @@ const schema = yup
   .object({
     userNameInput: yup
       .string()
+      .trim('No leading and trailing spaces')
+      .strict()
       .min(3, 'Username needs to be at least 3 characters')
       .max(20, 'Password needs to be maximum 20 characters')
-      .required(),
+      .required('It is a required field. Please fill'),
     emailInput: yup
       .string()
       .email('Enter a valid email address')
       .min(5, 'Enter a valid email address')
       .max(40, "Too much, isn't it? Maximum 40 characters")
-      .required(),
+      .required('It is a required field. Please fill'),
     passwInput: yup
       .string()
+      .trim('No leading and trailing spaces')
+      .strict()
       .min(6, 'Password needs to be at least 6 characters')
       .max(40, 'Password needs to be maximum 40 characters')
-      .required(),
+      .required('It is a required field. Please fill'),
     repeatPasswInput: yup
       .string()
+      .trim('No leading and trailing spaces')
+      .strict()
       .min(6, 'Password needs to be at least 6 characters')
       .oneOf([yup.ref('passwInput'), null], "Passwords don't match")
-      .required(),
+      .required('It is a required field. Please fill'),
     checkBoxInput: yup
       .boolean()
       .oneOf([true], 'Please confirm the processing of your data')
-      .required(),
+      .required('Please confirm the processing of your data'),
   })
   .required();
 

@@ -1,45 +1,59 @@
-import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import classNamesBind from 'classnames/bind';
 import { confirmEditing } from '../../store/userData.slice';
 import mwEditUserProfile from '../../middlewares/mwEditUserProfile';
 import Button from '../Button/Button';
 import classes from './edit-profile.module.scss';
 
+const cnb = classNamesBind.bind(classes);
+
+const schema = yup
+  .object({
+    passwInput: yup
+      .string()
+      .trim('No leading and trailing spaces')
+      .strict()
+      .min(6, 'Password needs to be at least 6 characters')
+      .max(40, 'Password needs to be maximum 40 characters')
+      .required('It is a required field. Please fill'),
+    avatarUrlInput: yup
+      .string()
+      .trim('No leading and trailing spaces')
+      .strict()
+      .url('Enter a valid image url')
+      .required('It is a required field. Please fill'),
+  })
+  .required();
+
 export default function EditProfile() {
-  const [inputValues, setInputValues] = useState({
-    passwInput: '',
-    avatarUrlInput: '',
-  });
   const { username, email, token } = useSelector((state) => state.userData.currUserData);
   const { editUserProfileStatus } = useSelector((state) => state.userData);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    setInputValues((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const { passwInput, avatarUrlInput } = inputValues;
-
+  const onSubmit = (data) => {
     const userInfo = {
       user: {
         username,
         email,
-        password: passwInput,
-        image: avatarUrlInput,
+        password: data.passwInput,
+        image: data.avatarUrlInput,
       },
     };
 
     dispatch(mwEditUserProfile({ userInfo, token }));
-
-    setInputValues({
-      passwInput: '',
-      avatarUrlInput: '',
-    });
   };
 
   useEffect(() => {
@@ -54,7 +68,7 @@ export default function EditProfile() {
       name="edit-profile"
       className={classes['edit-profile-form']}
       noValidate
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <h2 className={classes['edit-profile-form__header']}>Edit Profile</h2>
 
@@ -91,12 +105,15 @@ export default function EditProfile() {
           autoComplete="off"
           placeholder="New password"
           id="passw"
-          className={classes['edit-profile-form__input']}
-          name="passwInput"
-          value={inputValues.passwInput}
-          onChange={handleInputChange}
+          className={cnb('edit-profile-form__input', {
+            'edit-profile-form__input--validation-error': errors.passwInput,
+          })}
+          {...register('passwInput')}
         />
       </label>
+      <p className={classes['edit-profile-form__validation-error-text']}>
+        {errors.passwInput?.message}
+      </p>
 
       <label htmlFor="avatarUrl" className={classes['edit-profile-form__label']}>
         <span className={classes['edit-profile-form__label-text']}>Avatar image (url)</span>
@@ -105,12 +122,15 @@ export default function EditProfile() {
           autoComplete="on"
           placeholder="Avatar image"
           id="avatarUrl"
-          className={classes['edit-profile-form__input']}
-          name="avatarUrlInput"
-          value={inputValues.avatarUrlInput}
-          onChange={handleInputChange}
+          className={cnb('edit-profile-form__input', {
+            'edit-profile-form__input--validation-error': errors.avatarUrlInput,
+          })}
+          {...register('avatarUrlInput')}
         />
       </label>
+      <p className={classes['edit-profile-form__validation-error-text']}>
+        {errors.avatarUrlInput?.message}
+      </p>
 
       <Button classMod="button--full-width">Save</Button>
     </form>
