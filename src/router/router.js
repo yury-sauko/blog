@@ -3,10 +3,10 @@ import App from '../components/App/App';
 import ArticlesList from '../components/articlesPages/ArticlesList/ArticlesList';
 import BlogPagination from '../components/BlogPagination/BlogPagination';
 import ArticleFull from '../components/articlesPages/ArticleFull/ArticleFull';
-import SignIn from '../components/SignIn/SignIn';
-import SignUp from '../components/SignUp/SignUp';
+import SignIn from '../components/userProfilePages/SignIn/SignIn';
+import SignUp from '../components/userProfilePages/SignUp/SignUp';
 import SuccessCreateUser from '../components/servicePages/SuccessCreateUser/SuccessCreateUser';
-import EditProfile from '../components/EditProfile/EditProfile';
+import EditProfile from '../components/userProfilePages/EditProfile/EditProfile';
 import SuccessEditUserProfile from '../components/servicePages/SuccessEditUserProfile/SuccessEditUserProfile';
 import PageNotFound from '../components/servicePages/PageNotFound/PageNotFound';
 

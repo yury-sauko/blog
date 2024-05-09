@@ -4,6 +4,54 @@
   border-radius: 3px;
   background-color: #fff;
   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
+  &__btns-logged-wrapper {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 15px;
+  }
+  &__delete-btn {
+    width: 78px;
+    height: 31px;
+    margin-right: 12px;
+    border: 1px solid #f5222d;
+    border-radius: 5px;
+    background-color: inherit;
+    font-size: 14px;
+    color: #f5222d;
+    cursor: pointer;
+    &:focus,
+    &:active {
+      box-shadow: 3px 3px 5px #f5222d;
+      outline: none;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  &__edit-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 65px;
+    height: 31px;
+    border: 1px solid #52c41a;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #52c41a;
+    text-decoration: none;
+    background-color: inherit;
+    cursor: pointer;
+    &:focus,
+    &:active {
+      color: #1890ff;
+      border-color: #1890ff;
+      outline: none;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   &__md-body {
     overflow-wrap: anywhere;
   }

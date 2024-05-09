@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classNamesBind from 'classnames/bind';
-import { confirmCreating } from '../../store/userData.slice';
-import mwCreateNewUser from '../../middlewares/mwCreateNewUser';
-import Button from '../Button/Button';
+import { confirmCreating } from '../../../store/userData.slice';
+import mwCreateNewUser from '../../../middlewares/mwCreateNewUser';
+import Button from '../../Button/Button';
 import classes from './sign-up.module.scss';
 
 const cnb = classNamesBind.bind(classes);

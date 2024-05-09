@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classNamesBind from 'classnames/bind';
-import { confirmEditing } from '../../store/userData.slice';
-import mwEditUserProfile from '../../middlewares/mwEditUserProfile';
-import Button from '../Button/Button';
+import { confirmEditing } from '../../../store/userData.slice';
+import mwEditUserProfile from '../../../middlewares/mwEditUserProfile';
+import Button from '../../Button/Button';
 import classes from './edit-profile.module.scss';
 
 const cnb = classNamesBind.bind(classes);

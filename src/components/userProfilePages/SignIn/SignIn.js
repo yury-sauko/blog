@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classNamesBind from 'classnames/bind';
-import { confirmLoggedIn } from '../../store/userData.slice';
-import mwLoginUser from '../../middlewares/mwLoginUser';
-import Button from '../Button/Button';
+import { confirmLoggedIn } from '../../../store/userData.slice';
+import mwLoginUser from '../../../middlewares/mwLoginUser';
+import Button from '../../Button/Button';
 import classes from './sign-in.module.scss';
 
 const cnb = classNamesBind.bind(classes);
