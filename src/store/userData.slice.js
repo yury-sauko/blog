@@ -4,7 +4,7 @@ import mwLoginUser from '../middlewares/mwLoginUser';
 import mwEditUserProfile from '../middlewares/mwEditUserProfile';
 
 const initialState = {
-  createStatus: null,
+  createUserStatus: null,
   loginStatus: null,
   editUserProfileStatus: null,
   lastCreatedUsername: null,
@@ -17,7 +17,7 @@ const userDataSlice = createSlice({
 
   reducers: {
     confirmCreating: (state) => {
-      state.createStatus = 'created';
+      state.createUserStatus = 'created';
     },
     confirmLoggedIn: (state) => {
       state.loginStatus = 'loggedIn';
@@ -34,14 +34,14 @@ const userDataSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(mwCreateNewUser.pending, (state) => {
-        state.createStatus = 'pending';
+        state.createUserStatus = 'pending';
       })
       .addCase(mwCreateNewUser.fulfilled, (state, action) => {
-        state.createStatus = 'resolved';
+        state.createUserStatus = 'resolved';
         state.lastCreatedUsername = action.payload;
       })
       .addCase(mwCreateNewUser.rejected, (state) => {
-        state.createStatus = 'rejected';
+        state.createUserStatus = 'rejected';
       })
 
       .addCase(mwLoginUser.pending, (state) => {

@@ -49,7 +49,7 @@ const schema = yup
   .required();
 
 export default function SignUp() {
-  const { createStatus } = useSelector((state) => state.userData);
+  const { createUserStatus } = useSelector((state) => state.userData);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,11 +73,11 @@ export default function SignUp() {
   };
 
   useEffect(() => {
-    if (createStatus === 'resolved') {
+    if (createUserStatus === 'resolved') {
       navigate('../success-create-user');
       dispatch(confirmCreating());
     }
-  }, [createStatus]);
+  }, [createUserStatus]);
 
   return (
     <form

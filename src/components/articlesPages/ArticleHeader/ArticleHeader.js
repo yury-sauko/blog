@@ -44,6 +44,8 @@ export default function ArticleHeader({ slug }) {
         </div>
         <ul className={classes['article-header__tag-list']}>
           {tagList.map((el, idx) => {
+            if (el === null) return null;
+
             const elKey = idx + 1;
             const res =
               el.trim().length > 0 ? (

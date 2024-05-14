@@ -12,6 +12,7 @@ import {
 import storageSession from 'redux-persist/lib/storage/session';
 import startPageReducer from './startPage.slice';
 import userDataReducer from './userData.slice';
+import articleDataReducer from './articleData.slice';
 
 const persistConfig = {
   key: 'root',
@@ -21,6 +22,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   startPage: startPageReducer,
   userData: userDataReducer,
+  articleData: articleDataReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

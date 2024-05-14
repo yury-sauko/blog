@@ -8,6 +8,8 @@ import SignUp from '../components/userProfilePages/SignUp/SignUp';
 import SuccessCreateUser from '../components/servicePages/SuccessCreateUser/SuccessCreateUser';
 import EditProfile from '../components/userProfilePages/EditProfile/EditProfile';
 import SuccessEditUserProfile from '../components/servicePages/SuccessEditUserProfile/SuccessEditUserProfile';
+import CreateNewArticle from '../components/articlesPages/CreateNewArticle/CreateNewArticle';
+import SuccessCreateArticle from '../components/servicePages/SuccessCreateArticle/SuccessCreateArticle';
 import PageNotFound from '../components/servicePages/PageNotFound/PageNotFound';
 
 const router = createBrowserRouter([
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
       {
         path: 'success-edit-user-profile',
         element: <SuccessEditUserProfile />,
+      },
+      {
+        path: 'new-article',
+        element: <CreateNewArticle />,
+      },
+      {
+        path: 'success-create-article',
+        element: <SuccessCreateArticle />,
       },
       {
         path: '*',
