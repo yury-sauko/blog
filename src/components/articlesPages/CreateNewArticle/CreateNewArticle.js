@@ -2,12 +2,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-// import { useEffect } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classNamesBind from 'classnames/bind';
-// import { confirmCreating } from '../../../store/articleData.slice';
-import { pushToTagsArr, delFromTagsArr } from '../../../store/articleData.slice';
-// import mwCreateNewArticle from '../../../middlewares/mwCreateNewArticle';
+import { pushToTagsArr, delFromTagsArr, confirmCreating } from '../../../store/articleData.slice';
+import mwCreateNewArticle from '../../../middlewares/mwCreateNewArticle';
 import Button from '../../Button/Button';
 import classes from './create-new-article.module.scss';
 
@@ -32,21 +31,15 @@ const schema = yup
       .trim('No leading and trailing spaces')
       .strict()
       .min(1, 'Article text needs to be at least 1 character'),
-    tagInputName: yup
-      .string()
-      .trim('No leading and trailing spaces')
-      .strict()
-      .min(1, 'Tag needs to be at least 1 character')
-      .max(15, 'Tag needs to be maximum 15 characters'),
   })
   .required();
 
 export default function CreateNewArticle() {
-  const { createdTagsArr } = useSelector((state) => state.articleData);
-  // const { createArticleStatus } = useSelector((state) => state.articleData);
+  const { createArticleStatus, createdTagsArr } = useSelector((state) => state.articleData);
+  const { token } = useSelector((state) => state.userData.currUserData);
 
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -71,19 +64,9 @@ export default function CreateNewArticle() {
             type="text"
             autoComplete="off"
             placeholder="Tag"
-            className={cnb('create-article-form__input', 'create-article-form__input--width-300', {
-              'create-article-form__input--validation-error': errors.tagInputName,
-            })}
-            {...register(tagInputName)}
+            className={cnb('create-article-form__input', 'create-article-form__input--width-300')}
+            {...register(`tagInputs.${tagInputName}`)}
           />
-          <p
-            className={cnb(
-              'create-article-form__validation-error-text',
-              'create-article-form__validation-error-text--tag',
-            )}
-          >
-            {errors.tagInputName?.message}
-          </p>
         </div>
         <button
           type="button"
@@ -99,26 +82,29 @@ export default function CreateNewArticle() {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
+    const articleData = {
+      article: {
+        title: data.titleInput,
+        description: data.descrInput,
+        body: data.bodyTextArea,
+        tagList: Object.values(data.tagInputs),
+      },
+    };
 
-    // dispatch(
-    //   mwCreateNewArticle({
-    //     article: {
-    //       title: data.titleInput,
-    //       description: data.descrInput,
-    //       body: data.bodyTextArea,
-    //       tags: data.tagsInput,
-    //     },
-    //   }),
-    // );
+    console.log('data.tagInputs = ', data.tagInputs);
+    console.log('[String(Object.values(data.tagInputs)).split(', ')] =>');
+    console.log([String(Object.values(data.tagInputs)).split(',')]);
+    console.log('articleData = ', articleData);
+
+    dispatch(mwCreateNewArticle({ token, articleData }));
   };
 
-  // useEffect(() => {
-  //   if (createArticleStatus === 'resolved') {
-  //     navigate('../success-create-article');
-  //     dispatch(confirmCreating());
-  //   }
-  // }, [createArticleStatus]);
+  useEffect(() => {
+    if (createArticleStatus === 'resolved') {
+      navigate('../success-create-article');
+      dispatch(confirmCreating());
+    }
+  }, [createArticleStatus]);
 
   return (
     <form

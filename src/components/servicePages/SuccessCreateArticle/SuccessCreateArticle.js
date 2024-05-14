@@ -14,7 +14,7 @@ export default function SuccessCreateArticle() {
 
   return (
     <div className={classes['success-create-article']}>
-      Статья успешно создана. Сейчас вы будете перенаправлены на ее страницу
+      Статья успешно создана. Сейчас вы будете перенаправлены на главную страницу
     </div>
   );
 }

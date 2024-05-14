@@ -3,7 +3,7 @@ import mwCreateNewArticle from '../middlewares/mwCreateNewArticle';
 
 const initialState = {
   createArticleStatus: null,
-  createdArticleData: {},
+  lastCreatedArticleData: {},
   createdTagsArr: [1],
 };
 
@@ -31,7 +31,7 @@ const articleDataSlice = createSlice({
       })
       .addCase(mwCreateNewArticle.fulfilled, (state, action) => {
         state.createArticleStatus = 'resolved';
-        state.createdArticleData = action.payload;
+        state.lastCreatedArticleData = action.payload;
       })
       .addCase(mwCreateNewArticle.rejected, (state) => {
         state.createArticleStatus = 'rejected';
