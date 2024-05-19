@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import mwCreateNewArticle from '../middlewares/mwCreateNewArticle';
 import mwEditArticle from '../middlewares/mwEditArticle';
 import mwDeleteArticle from '../middlewares/mwDeleteArticle';
+import mwFetchFavoriteArticle from '../middlewares/mwFetchFavoriteArticle';
 
 const initialState = {
   createArticleStatus: null,
@@ -11,6 +12,8 @@ const initialState = {
   lastCreatedArticleData: {},
   lastEditedArticleData: {},
   lastDeletedArticleSlug: null,
+  lastFavoriteArticleSlug: null,
+  lastFavoriteArticleMethod: null,
   createdTagsArr: [''],
   editedTagsArr: [],
 };
@@ -45,6 +48,9 @@ const articleDataSlice = createSlice({
     },
     confirmDeleting: (state) => {
       state.deleteArticleStatus = 'deleted';
+    },
+    changeFavoriteArticleMethod: (state) => {
+      state.lastFavoriteArticleMethod = 'userIsLoggedOut';
     },
   },
 
@@ -84,6 +90,11 @@ const articleDataSlice = createSlice({
       })
       .addCase(mwDeleteArticle.rejected, (state) => {
         state.deleteArticleStatus = 'rejected';
+      })
+
+      .addCase(mwFetchFavoriteArticle.fulfilled, (state, action) => {
+        state.lastFavoriteArticleSlug = action.payload.slug;
+        state.lastFavoriteArticleMethod = action.payload.method;
       });
   },
 });
@@ -97,6 +108,7 @@ export const {
   confirmCreating,
   confirmEditing,
   confirmDeleting,
+  changeFavoriteArticleMethod,
 } = articleDataSlice.actions;
 
 export default articleDataSlice.reducer;

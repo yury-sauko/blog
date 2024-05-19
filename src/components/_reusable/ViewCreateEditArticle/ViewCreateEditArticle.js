@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import classNamesBind from 'classnames/bind';
 import PropTypes from 'prop-types';
 import { initializeEditedTagsArr } from '../../../store/articleData.slice';
-import Button from '../../Button/Button';
+import Button from '../Button/Button';
 import classes from './create-edit-article.module.scss';
 
 const cnb = classNamesBind.bind(classes);
@@ -176,7 +176,7 @@ ViewCreateEditArticle.propTypes = {
   formName: PropTypes.string.isRequired,
   formHeader: PropTypes.string.isRequired,
   defValuesObj: PropTypes.objectOf(PropTypes.string).isRequired,
-  tagsArr: PropTypes.array.isRequired,
+  tagsArr: PropTypes.arrayOf(PropTypes.string).isRequired,
   onBtnAddClick: PropTypes.func.isRequired,
   onBtnDelClick: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

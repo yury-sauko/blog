@@ -51,7 +51,7 @@ export default function EditArticle() {
 
   useEffect(() => {
     if (editArticleStatus === 'resolved') {
-      dispatch(mwFetchArticles(offset));
+      dispatch(mwFetchArticles({ token, offset }));
       navigate('../article-action-type');
       dispatch(confirmEditing());
     }

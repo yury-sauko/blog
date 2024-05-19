@@ -8,10 +8,11 @@ import classes from './app.module.scss';
 
 export default function App() {
   const { currentPage, offset } = useSelector((state) => state.startPage);
+  const { token } = useSelector((state) => state.userData.currUserData);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const timer = setTimeout(() => dispatch(mwFetchArticles(offset)), 1500);
+    const timer = setTimeout(() => dispatch(mwFetchArticles({ token, offset })), 1500);
     return () => {
       clearTimeout(timer);
     };

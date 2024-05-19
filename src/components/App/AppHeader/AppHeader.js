@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { confirmLoggedOut } from '../../../store/userData.slice';
+import { changeFavoriteArticleMethod } from '../../../store/articleData.slice';
 import defUserAvatar from '../../../assets/img/userAvatar.svg';
 import classes from './app-header.module.scss';
 
@@ -14,6 +15,7 @@ export default function AppHeader() {
 
   const onBtnClick = () => {
     dispatch(confirmLoggedOut());
+    dispatch(changeFavoriteArticleMethod());
   };
 
   const authorizedBlock = (

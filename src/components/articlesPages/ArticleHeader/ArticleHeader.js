@@ -1,16 +1,26 @@
+import { useEffect } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
-import { HeartOutlined } from '@ant-design/icons';
+import { Popover } from 'antd';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import mwFetchFavoriteArticle from '../../../middlewares/mwFetchFavoriteArticle';
+import mwFetchArticles from '../../../middlewares/mwFetchArticles';
 import classes from './article-header.module.scss';
 
 export default function ArticleHeader({ slug }) {
-  const { articles } = useSelector((state) => state.startPage);
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.userData.currUserData);
+  const { lastFavoriteArticleSlug, lastFavoriteArticleMethod } = useSelector(
+    (state) => state.articleData,
+  );
+  const { articles, offset } = useSelector((state) => state.startPage);
   const [thisArticle] = articles.filter((el) => el.slug === slug);
 
   const {
     title,
+    favorited,
     favoritesCount,
     tagList,
     author: { username, image },
@@ -32,13 +42,36 @@ export default function ArticleHeader({ slug }) {
 
   const userNameClamped = username.length <= 20 ? username : `${username.slice(0, 18)}...`;
 
+  const fetchFavoriteArticle = (isFavorited) =>
+    !isFavorited
+      ? dispatch(mwFetchFavoriteArticle({ slug, token, method: 'POST' }))
+      : dispatch(mwFetchFavoriteArticle({ slug, token, method: 'DELETE' }));
+
+  const favoriteArticleIcon = favorited ? (
+    <HeartFilled
+      onClick={() => fetchFavoriteArticle(favorited)}
+      className={classes['article-header__like-icon-filled']}
+    />
+  ) : (
+    <Popover content="Please log in for favorite an article" trigger="click">
+      <HeartOutlined
+        onClick={() => fetchFavoriteArticle(favorited)}
+        className={classes['article-header__like-icon-outlined']}
+      />
+    </Popover>
+  );
+
+  useEffect(() => {
+    dispatch(mwFetchArticles({ token, offset }));
+  }, [lastFavoriteArticleSlug, lastFavoriteArticleMethod]);
+
   return (
     <div className={classes['article-header']}>
       <div className={classes['article-header__left-col']}>
         <div className={classes['article-header__header-wrapper']}>
           {headerLinkOrSpan}
           <div className={classes['article-header__like-wrapper']}>
-            <HeartOutlined className={classes['article-header__like-icon']} />
+            {favoriteArticleIcon}
             <span className={classes['article-header__like-count']}>{favoritesCount}</span>
           </div>
         </div>

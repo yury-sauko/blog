@@ -35,7 +35,7 @@ export default function ArticleFull() {
 
   useEffect(() => {
     if (deleteArticleStatus === 'resolved') {
-      dispatch(mwFetchArticles(offset));
+      dispatch(mwFetchArticles({ token, offset }));
       navigate('../article-action-type');
       dispatch(confirmDeleting());
     }

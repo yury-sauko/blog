@@ -41,7 +41,7 @@ export default function CreateNewArticle() {
 
   useEffect(() => {
     if (createArticleStatus === 'resolved') {
-      dispatch(mwFetchArticles(offset));
+      dispatch(mwFetchArticles({ token, offset }));
       navigate('../article-action-type');
       dispatch(confirmCreating());
     }

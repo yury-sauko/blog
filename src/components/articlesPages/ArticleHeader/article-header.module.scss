@@ -41,10 +41,15 @@
     align-items: center;
     gap: 5px;
   }
-  &__like-icon {
+  &__like-icon-outlined {
     font-size: 16px;
     line-height: 1;
     color: rgba(0, 0, 0, 0.75);
+  }
+  &__like-icon-filled {
+    font-size: 16px;
+    line-height: 1;
+    color: #ff0707;
   }
   &__like-count {
     font-size: 12px;
