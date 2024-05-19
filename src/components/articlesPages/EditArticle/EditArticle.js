@@ -1,29 +1,39 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import {
-  pushToCreatedTagsArr,
-  delFromCreatedTagsArr,
-  confirmCreating,
+  pushToEditedTagsArr,
+  delFromEditedTagsArr,
+  confirmEditing,
 } from '../../../store/articleData.slice';
 import mwFetchArticles from '../../../middlewares/mwFetchArticles';
-import mwCreateNewArticle from '../../../middlewares/mwCreateNewArticle';
+import mwEditArticle from '../../../middlewares/mwEditArticle';
 import ViewCreateEditArticle from '../../_reusable/ViewCreateEditArticle/ViewCreateEditArticle';
 
-export default function CreateNewArticle() {
-  const { createArticleStatus, createdTagsArr } = useSelector((state) => state.articleData);
+export default function EditArticle() {
+  const { editArticleStatus } = useSelector((state) => state.articleData);
   const { token } = useSelector((state) => state.userData.currUserData);
-  const { offset } = useSelector((state) => state.startPage);
+  const { articles, offset } = useSelector((state) => state.startPage);
+
+  const slug = useLoaderData();
+
+  const [thisArticle] = articles.filter((el) => el.slug === slug);
+  const {
+    title: thisTitle,
+    description: thisDescr,
+    body: thisBody,
+    tagList: thisTagList,
+  } = thisArticle;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onBtnAddClick = () => {
-    dispatch(pushToCreatedTagsArr());
+    dispatch(pushToEditedTagsArr());
   };
 
   const onBtnDelClick = (e) => {
-    dispatch(delFromCreatedTagsArr(e.target.name));
+    dispatch(delFromEditedTagsArr(e.target.name));
   };
 
   const onSubmit = (data) => {
@@ -36,23 +46,23 @@ export default function CreateNewArticle() {
       },
     };
 
-    dispatch(mwCreateNewArticle({ token, articleData }));
+    dispatch(mwEditArticle({ token, slug, articleData }));
   };
 
   useEffect(() => {
-    if (createArticleStatus === 'resolved') {
+    if (editArticleStatus === 'resolved') {
       dispatch(mwFetchArticles(offset));
       navigate('../article-action-type');
-      dispatch(confirmCreating());
+      dispatch(confirmEditing());
     }
-  }, [createArticleStatus]);
+  }, [editArticleStatus]);
 
   return (
     <ViewCreateEditArticle
-      formName="create-article"
-      formHeader="Create new article"
-      defValuesObj={{ defTitle: '', defDescr: '', defBody: '' }}
-      tagsArr={createdTagsArr}
+      formName="edit-article"
+      formHeader="Edit article"
+      defValuesObj={{ defTitle: thisTitle, defDescr: thisDescr, defBody: thisBody }}
+      tagsArr={thisTagList}
       onBtnAddClick={onBtnAddClick}
       onBtnDelClick={onBtnDelClick}
       onSubmit={onSubmit}

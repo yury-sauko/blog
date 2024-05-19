@@ -1,27 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export default createAsyncThunk(
-  'articleData/mwCreateNewArticle',
+  'articleData/mwDeleteArticle',
   async (args, { rejectWithValue }) => {
     try {
       const baseUrl = 'https://blog.kata.academy/api';
 
-      const response = await fetch(`${baseUrl}/articles`, {
-        method: 'POST',
+      const response = await fetch(`${baseUrl}/articles/${args.slug}`, {
+        method: 'DELETE',
         headers: {
           Authorization: `Token ${args.token}`,
           'Content-Type': 'application/json;charset=utf-8',
         },
-        body: JSON.stringify(args.articleData),
       });
 
       if (!response.ok) {
-        throw new Error(`Could not fetch ${baseUrl}/articles, received status ${response.status}`);
+        throw new Error(
+          `Could not fetch ${baseUrl}/articles/${args.slug}, received status ${response.status}`,
+        );
       }
 
-      const data = await response.json();
-
-      return data;
+      return args.slug;
     } catch (error) {
       return rejectWithValue(error.message);
     }

@@ -54,8 +54,8 @@ export default function SignIn() {
 
   useEffect(() => {
     if (loginStatus === 'resolved') {
-      navigate('..');
       dispatch(confirmLoggedIn());
+      navigate('..');
     }
   }, [loginStatus]);
 
