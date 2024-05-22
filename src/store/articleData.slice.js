@@ -9,13 +9,11 @@ const initialState = {
   editArticleStatus: null,
   deleteArticleStatus: null,
   lastArticleActionType: null,
-  lastCreatedArticleData: {},
-  lastEditedArticleData: {},
+  lastCreatedArticleData: null,
+  lastEditedArticleData: null,
   lastDeletedArticleSlug: null,
   lastFavoriteArticleSlug: null,
   lastFavoriteArticleMethod: null,
-  createdTagsArr: [''],
-  editedTagsArr: [],
 };
 
 const articleDataSlice = createSlice({
@@ -23,23 +21,6 @@ const articleDataSlice = createSlice({
   initialState,
 
   reducers: {
-    pushToCreatedTagsArr: (state) => {
-      state.createdTagsArr.push(Math.random().toFixed(3) * 1000);
-    },
-    delFromCreatedTagsArr: (state, action) => {
-      const idx = state.createdTagsArr.findIndex((el) => el === action.payload);
-      state.createdTagsArr.splice(idx, 1);
-    },
-    initializeEditedTagsArr: (state, action) => {
-      state.editedTagsArr = [...action.payload];
-    },
-    pushToEditedTagsArr: (state) => {
-      state.editedTagsArr.push('');
-    },
-    delFromEditedTagsArr: (state, action) => {
-      const idx = state.editedTagsArr.findIndex((el) => el === action.payload);
-      state.editedTagsArr.splice(idx, 1);
-    },
     confirmCreating: (state) => {
       state.createArticleStatus = 'created';
     },
@@ -99,16 +80,7 @@ const articleDataSlice = createSlice({
   },
 });
 
-export const {
-  pushToCreatedTagsArr,
-  delFromCreatedTagsArr,
-  initializeEditedTagsArr,
-  pushToEditedTagsArr,
-  delFromEditedTagsArr,
-  confirmCreating,
-  confirmEditing,
-  confirmDeleting,
-  changeFavoriteArticleMethod,
-} = articleDataSlice.actions;
+export const { confirmCreating, confirmEditing, confirmDeleting, changeFavoriteArticleMethod } =
+  articleDataSlice.actions;
 
 export default articleDataSlice.reducer;

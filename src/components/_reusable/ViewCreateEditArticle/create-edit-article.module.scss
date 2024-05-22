@@ -81,6 +81,7 @@
   }
   &__tag-wrapper {
     display: inline-flex;
+    flex-wrap: wrap;
     margin-bottom: 5px;
     &:last-child {
       margin-bottom: 0;

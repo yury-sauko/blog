@@ -1,12 +1,8 @@
-import { useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import classNamesBind from 'classnames/bind';
 import PropTypes from 'prop-types';
-import { initializeEditedTagsArr } from '../../../store/articleData.slice';
 import Button from '../Button/Button';
 import classes from './create-edit-article.module.scss';
 
@@ -31,6 +27,15 @@ const schema = yup
       .trim('No leading and trailing spaces')
       .strict()
       .min(1, 'Article text needs to be at least 1 character'),
+    tagsArr: yup.array().of(
+      yup.object().shape({
+        tagInput: yup
+          .string()
+          .trim('No leading and trailing spaces')
+          .strict()
+          .min(1, 'Tag needs to be at least 1 character'),
+      }),
+    ),
   })
   .required();
 
@@ -38,22 +43,13 @@ export default function ViewCreateEditArticle({
   formName,
   formHeader,
   defValuesObj,
-  tagsArr,
-  onBtnAddClick,
-  onBtnDelClick,
+  defTagsArr,
   onSubmit,
 }) {
   const { defTitle, defDescr, defBody } = defValuesObj;
-  const dispatch = useDispatch();
-  const location = useLocation();
-
-  const getDefTagsValuesObj = (thisTagsArr) =>
-    thisTagsArr.reduce(
-      (acc, el, idx) => ({ ...acc, [`tagInput_${el}-${idx}`]: thisTagsArr[idx] }),
-      {},
-    );
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -64,41 +60,14 @@ export default function ViewCreateEditArticle({
       titleInput: defTitle,
       descrInput: defDescr,
       bodyTextArea: defBody,
-      tagInputs: getDefTagsValuesObj(tagsArr),
+      tagsArr: defTagsArr,
     },
   });
 
-  const createTagEl = (el, idx) => {
-    const tagInputName = `tagInput_${el}-${idx}`;
-    return (
-      <li key={tagInputName} className={classes['article-form__tag-wrapper']}>
-        <div>
-          <input
-            type="text"
-            autoComplete="off"
-            placeholder="Tag"
-            className={cnb('article-form__input', 'article-form__input--width-300')}
-            {...register(`tagInputs.${tagInputName}`)}
-          />
-        </div>
-        <button
-          type="button"
-          disabled={tagsArr.length === 1}
-          name={el}
-          className={classes['article-form__btn-del']}
-          onClick={onBtnDelClick}
-        >
-          Delete
-        </button>
-      </li>
-    );
-  };
-
-  useEffect(() => {
-    if (location.pathname.slice(-4) === 'edit') {
-      dispatch(initializeEditedTagsArr(tagsArr));
-    }
-  }, []);
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'tagsArr',
+  });
 
   return (
     <form
@@ -156,12 +125,33 @@ export default function ViewCreateEditArticle({
 
       <div className={classes['article-form__tags-btns-wrapper']}>
         <ul className={classes['article-form__tags-list']}>
-          {tagsArr.map((el, idx) => createTagEl(el, idx))}
+          {fields.map((item, index) => (
+            <li key={item.id} className={classes['article-form__tag-wrapper']}>
+              <input
+                type="text"
+                autoComplete="off"
+                placeholder="Tag"
+                className={cnb('article-form__input', 'article-form__input--width-300')}
+                {...register(`tagsArr.${index}.tagInput`)}
+              />
+              <button
+                type="button"
+                disabled={fields.length === 1}
+                className={classes['article-form__btn-del']}
+                onClick={() => remove(index)}
+              >
+                Delete
+              </button>
+              <p className={classes['article-form__validation-error-text']}>
+                {errors.tagsArr?.[index]?.tagInput?.message}
+              </p>
+            </li>
+          ))}
         </ul>
         <button
           type="button"
           className={cnb('article-form__btn-del', 'article-form__btn-del--add')}
-          onClick={onBtnAddClick}
+          onClick={() => append({ tagInput: '' })}
         >
           Add tag
         </button>
@@ -176,8 +166,6 @@ ViewCreateEditArticle.propTypes = {
   formName: PropTypes.string.isRequired,
   formHeader: PropTypes.string.isRequired,
   defValuesObj: PropTypes.objectOf(PropTypes.string).isRequired,
-  tagsArr: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onBtnAddClick: PropTypes.func.isRequired,
-  onBtnDelClick: PropTypes.func.isRequired,
+  defTagsArr: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
   onSubmit: PropTypes.func.isRequired,
 };

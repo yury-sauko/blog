@@ -7,6 +7,7 @@ import { Popover } from 'antd';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import mwFetchFavoriteArticle from '../../../middlewares/mwFetchFavoriteArticle';
 import mwFetchArticles from '../../../middlewares/mwFetchArticles';
+import defUserAvatar from '../../../assets/img/userAvatar.svg';
 import classes from './article-header.module.scss';
 
 export default function ArticleHeader({ slug }) {
@@ -47,10 +48,10 @@ export default function ArticleHeader({ slug }) {
       ? dispatch(mwFetchFavoriteArticle({ slug, token, method: 'POST' }))
       : dispatch(mwFetchFavoriteArticle({ slug, token, method: 'DELETE' }));
 
-  const favoriteArticleIcon = favorited ? (
-    <HeartFilled
+  const heartOutlinedWithCondition = token ? (
+    <HeartOutlined
       onClick={() => fetchFavoriteArticle(favorited)}
-      className={classes['article-header__like-icon-filled']}
+      className={classes['article-header__like-icon-outlined']}
     />
   ) : (
     <Popover content="Please log in for favorite an article" trigger="click">
@@ -59,6 +60,15 @@ export default function ArticleHeader({ slug }) {
         className={classes['article-header__like-icon-outlined']}
       />
     </Popover>
+  );
+
+  const favoriteArticleIcon = favorited ? (
+    <HeartFilled
+      onClick={() => fetchFavoriteArticle(favorited)}
+      className={classes['article-header__like-icon-filled']}
+    />
+  ) : (
+    heartOutlinedWithCondition
   );
 
   useEffect(() => {
@@ -99,6 +109,9 @@ export default function ArticleHeader({ slug }) {
         <div className={classes['article-header__user-avatar']}>
           <img
             src={image}
+            onError={(e) => {
+              e.target.src = defUserAvatar;
+            }}
             alt="User avatar"
             className={classes['article-header__user-avatar-img']}
           />
