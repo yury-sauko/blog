@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../components/App/App';
 import PrivateRoute from './PrivateRoute';
+import RestrictIfUserLogged from './RestrictIfUserLogged';
 import ArticlesList from '../components/articlesPages/ArticlesList/ArticlesList';
 import BlogPagination from '../components/BlogPagination/BlogPagination';
 import ArticleFull from '../components/articlesPages/ArticleFull/ArticleFull';
@@ -33,14 +34,6 @@ const router = createBrowserRouter([
         path: 'articles/:slug',
         element: <ArticleFull />,
         loader: ({ params }) => params.slug,
-      },
-      {
-        path: 'sign-in',
-        element: <SignIn />,
-      },
-      {
-        path: 'sign-up',
-        element: <SignUp />,
       },
       {
         path: '*',
@@ -88,6 +81,34 @@ const router = createBrowserRouter([
             path: 'articles/:slug/edit',
             element: <EditArticle />,
             loader: ({ params }) => params.slug,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <RestrictIfUserLogged />,
+    children: [
+      {
+        path: '/',
+        element: <App />,
+        children: [
+          {
+            index: true,
+            element: (
+              <>
+                <ArticlesList />
+                <BlogPagination />
+              </>
+            ),
+          },
+          {
+            path: 'sign-in',
+            element: <SignIn />,
+          },
+          {
+            path: 'sign-up',
+            element: <SignUp />,
           },
         ],
       },

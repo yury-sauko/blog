@@ -9,8 +9,6 @@ export default function AppHeader() {
   const { loginStatus } = useSelector((state) => state.userData);
   const { username, image } = useSelector((state) => state.userData.currUserData);
 
-  const userAvatar = image || defUserAvatar;
-
   const dispatch = useDispatch();
 
   const onBtnClick = () => {
@@ -26,7 +24,14 @@ export default function AppHeader() {
       <Link to="profile" className={classes['app-header__link-profile']}>
         <span className={classes['app-header__username']}>{username}</span>
         <div className={classes['app-header__avatar-wrapper']}>
-          <img src={userAvatar} alt="User avatar" className={classes['app-header__avatar-img']} />
+          <img
+            src={image}
+            onError={(e) => {
+              e.target.src = defUserAvatar;
+            }}
+            alt="User avatar"
+            className={classes['app-header__avatar-img']}
+          />
         </div>
       </Link>
       <button type="button" className={classes['app-header__btn-log-out']} onClick={onBtnClick}>
