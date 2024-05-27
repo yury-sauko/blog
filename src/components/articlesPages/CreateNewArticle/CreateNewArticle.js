@@ -42,6 +42,7 @@ export default function CreateNewArticle() {
       defValuesObj={{ defTitle: '', defDescr: '', defBody: '' }}
       defTagsArr={[{ tagInput: '' }]}
       onSubmit={onSubmit}
+      mainBtnName="Create"
     />
   );
 }

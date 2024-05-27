@@ -15,7 +15,7 @@ export default createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error(`Could not fetch ${baseUrl}/users, received status ${response.status}`);
+        throw new Error(response.status);
       }
 
       const data = await response.json();

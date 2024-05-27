@@ -45,6 +45,7 @@ export default function ViewCreateEditArticle({
   defValuesObj,
   defTagsArr,
   onSubmit,
+  mainBtnName,
 }) {
   const { defTitle, defDescr, defBody } = defValuesObj;
 
@@ -157,7 +158,7 @@ export default function ViewCreateEditArticle({
         </button>
       </div>
 
-      <Button classMod="button--width-319">Create</Button>
+      <Button classMod="button--width-319">{mainBtnName}</Button>
     </form>
   );
 }
@@ -168,4 +169,5 @@ ViewCreateEditArticle.propTypes = {
   defValuesObj: PropTypes.objectOf(PropTypes.string).isRequired,
   defTagsArr: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
   onSubmit: PropTypes.func.isRequired,
+  mainBtnName: PropTypes.string.isRequired,
 };

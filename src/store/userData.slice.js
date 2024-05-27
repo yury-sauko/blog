@@ -6,6 +6,8 @@ import mwEditUserProfile from '../middlewares/mwEditUserProfile';
 const initialState = {
   createUserStatus: null,
   loginStatus: null,
+  isLoginError: false,
+  isCreateUserError: false,
   editUserProfileStatus: null,
   lastCreatedUsername: null,
   currUserData: { username: '', image: '', token: '' },
@@ -40,19 +42,28 @@ const userDataSlice = createSlice({
         state.createUserStatus = 'resolved';
         state.lastCreatedUsername = action.payload;
       })
-      .addCase(mwCreateNewUser.rejected, (state) => {
+      .addCase(mwCreateNewUser.rejected, (state, action) => {
         state.createUserStatus = 'rejected';
+
+        if (action.payload === '422') {
+          state.isCreateUserError = true;
+        }
       })
 
       .addCase(mwLoginUser.pending, (state) => {
         state.loginStatus = 'pending';
+        state.isLoginError = false;
       })
       .addCase(mwLoginUser.fulfilled, (state, action) => {
         state.loginStatus = 'resolved';
         state.currUserData = action.payload;
       })
-      .addCase(mwLoginUser.rejected, (state) => {
+      .addCase(mwLoginUser.rejected, (state, action) => {
         state.loginStatus = 'rejected';
+
+        if (action.payload === '422') {
+          state.isLoginError = true;
+        }
       })
 
       .addCase(mwEditUserProfile.pending, (state) => {

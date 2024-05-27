@@ -52,6 +52,7 @@ export default function EditArticle() {
       defValuesObj={{ defTitle: thisTitle, defDescr: thisDescr, defBody: thisBody }}
       defTagsArr={thisTagList.map((el) => ({ tagInput: el }))}
       onSubmit={onSubmit}
+      mainBtnName="Edit"
     />
   );
 }

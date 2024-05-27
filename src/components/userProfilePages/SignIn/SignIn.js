@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classNamesBind from 'classnames/bind';
 import { confirmLoggedIn } from '../../../store/userData.slice';
@@ -31,14 +31,17 @@ const schema = yup
   .required();
 
 export default function SignIn() {
-  const { loginStatus } = useSelector((state) => state.userData);
+  const { loginStatus, isLoginError } = useSelector((state) => state.userData);
+
+  const [showLoginError, setShowLoginError] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { isDirty, errors },
   } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
   const onSubmit = (data) => {
@@ -51,6 +54,12 @@ export default function SignIn() {
       }),
     );
   };
+
+  useEffect(() => {
+    if (isLoginError && isDirty) {
+      setShowLoginError(true);
+    }
+  }, [isLoginError]);
 
   useEffect(() => {
     if (loginStatus === 'resolved') {
@@ -99,6 +108,19 @@ export default function SignIn() {
       <p className={classes['sign-in-form__validation-error-text']}>{errors.passwInput?.message}</p>
 
       <Button classMod="button--full-width">Login</Button>
+
+      {showLoginError && (
+        <p
+          className={cnb(
+            'sign-in-form__validation-error-text',
+            'sign-in-form__validation-error-text--login-error',
+          )}
+        >
+          The wrong email or password was entered.
+          <br />
+          Please try again
+        </p>
+      )}
 
       <span className={classes['sign-in-form__text-sign-up']}>
         Don’t have an account?{' '}

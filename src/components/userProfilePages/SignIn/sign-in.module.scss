@@ -1,6 +1,6 @@
 .sign-in-form {
   width: 384px;
-  height: 374px;
+  min-height: 374px;
   margin: 40px auto 0;
   padding: 48px 32px;
   border: 1px solid #d9d9d9;
@@ -85,5 +85,12 @@
     font-size: 13px;
     line-height: 1.15;
     color: #f5222d;
+    &--login-error {
+      padding: 3px;
+      border: 1px solid #f5222d;
+      border-radius: 3px;
+      background-color: #fff2f0;
+      text-align: center;
+    }
   }
 }

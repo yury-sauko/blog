@@ -13,7 +13,7 @@ export default createAsyncThunk('userData/mwLoginUser', async (userData, { rejec
     });
 
     if (!response.ok) {
-      throw new Error(`Could not fetch ${baseUrl}/users/login, received status ${response.status}`);
+      throw new Error(response.status);
     }
 
     const data = await response.json();

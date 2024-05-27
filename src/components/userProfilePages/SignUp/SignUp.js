@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classNamesBind from 'classnames/bind';
 import { confirmCreating } from '../../../store/userData.slice';
@@ -49,7 +49,9 @@ const schema = yup
   .required();
 
 export default function SignUp() {
-  const { createUserStatus } = useSelector((state) => state.userData);
+  const { createUserStatus, isCreateUserError } = useSelector((state) => state.userData);
+
+  const [showCreateUserError, setShowCreateUserError] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ export default function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { isDirty, errors },
   } = useForm({ resolver: yupResolver(schema), mode: 'onBlur' });
 
   const onSubmit = (data) => {
@@ -71,6 +73,12 @@ export default function SignUp() {
       }),
     );
   };
+
+  useEffect(() => {
+    if (isCreateUserError && isDirty) {
+      setShowCreateUserError(true);
+    }
+  }, [isCreateUserError]);
 
   useEffect(() => {
     if (createUserStatus === 'resolved') {
@@ -172,6 +180,19 @@ export default function SignUp() {
       </p>
 
       <Button classMod="button--full-width">Create</Button>
+
+      {showCreateUserError && (
+        <p
+          className={cnb(
+            'sign-up-form__validation-error-text',
+            'sign-up-form__validation-error-text--create-error',
+          )}
+        >
+          Email or username is already taken.
+          <br />
+          Please try to change one of them
+        </p>
+      )}
 
       <span className={classes['sign-up-form__text-sign-in']}>
         Already have an account?{' '}
